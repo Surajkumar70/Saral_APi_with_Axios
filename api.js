@@ -1,4 +1,5 @@
 const axios = require('axios');
+const fs = require('fs')
 const readline = (require('readline-sync'));
 axios.get("http://saral.navgurukul.org/api/courses").then(function(response) {
     var con = (response.data.availableCourses);
@@ -39,9 +40,12 @@ axios.get("http://saral.navgurukul.org/api/courses").then(function(response) {
             if (i == sool) {
                 axios.get("http://saral.navgurukul.org/api/courses/" + course_id + "/exercise/getBySlug?slug=" + d[i]).then(function(data) {
                     var con = (data.data.content);
-                    // console.log(con);
                     let slugdata = JSON.parse(con)
-                    console.log(JSON.parse(slugdata[0].split("\\").join("")))
+                    const jsonData = JSON.stringify(JSON.parse(slugdata[0].split("\\").join("")));
+                    fs.writeFileSync("slugdata.json", jsonData, (err) => {
+                        console.log("done");
+                    })
+
                 });
             }
         }
